@@ -186,7 +186,7 @@ void Modbus_RegMap(void)
 	MAP_MODBUS_HOLDREG(MODBUS_SAVE_DATA_START + 49, fill_bottle_module[0].set_para.set_nozzle_up_time);
 	MAP_MODBUS_HOLDREG(MODBUS_SAVE_DATA_START + 50, fill_bottle_module[0].set_para.set_nozzle_down_time);
 	MAP_MODBUS_HOLDREG(MODBUS_SAVE_DATA_START + 51, fill_bottle_module[0].set_para.set_fill_bottle_finished_delay);
-	MAP_MODBUS_HOLDREG(MODBUS_SAVE_DATA_START + 52, counter_env.set_servo_motor_pulse_num);
+	MAP_MODBUS_HOLDREG(MODBUS_SAVE_DATA_START + 52, counter_env.set_servo_motor_shift_bottle_num);
 	MAP_MODBUS_HOLDREG(MODBUS_SAVE_DATA_START + 53, counter_env.set_servo_motor_speed);
 	
 //END AT	MAP_MODBUS_HOLDREG(MODBUS_SAVE_DATA_START + 70, counter_module[0].set_para.set_start_rej);

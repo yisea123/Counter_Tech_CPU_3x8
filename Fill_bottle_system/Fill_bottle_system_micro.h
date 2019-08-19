@@ -8,6 +8,8 @@
 
 #define USE_SCREW_SHIFT_BOTTLE
 
+#define ONE_BOTTLE_SERVO_MOTOR_PULSE_NUM 3156
+
 
 
 
@@ -27,7 +29,7 @@
 #define SET_FILL_REJECT_START_DELAY  (p_fill_bottle_module->set_para.set_reject_delay)
 #define SET_FILL_REJECT_KEEP_DELAY  (p_fill_bottle_module->set_para.set_reject_keep)
 
-#define SET_FILL_SERVO_MOTOR_PULSE_NUM counter_env.set_servo_motor_pulse_num
+#define SET_FILL_SERVO_MOTOR_PULSE_NUM (counter_env.set_servo_motor_shift_bottle_num * ONE_BOTTLE_SERVO_MOTOR_PULSE_NUM)
 #define SET_FILL_SERVO_MOTOR_SHIFT_BOTTLE_DELAY fill_bottle_module[0].set_para.set_shift_bottle_time
 
 #define SET_FILL_CONTINUE_REJECT_STOP_NUM (counter_env.set_continue_reject_stop_num)

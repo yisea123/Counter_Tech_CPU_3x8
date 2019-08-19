@@ -275,7 +275,7 @@ typedef struct{
 	uint16_t set_count;
 	uint16_t set_pre_count;
 	
-	uint16_t set_servo_motor_pulse_num;
+	uint16_t set_servo_motor_shift_bottle_num;
 	uint16_t set_servo_motor_speed;
 	
 	uint16_t counter_da_module[MODBUS_DA_NUM];

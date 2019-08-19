@@ -454,6 +454,13 @@ void io_task (void *pdata)
 		}else{
 			counter_module[1].output_buf_low_manual = 0xFFFF;
 		}
+		if (virtual_input[48- VIRTUAL_INPUT_OFFSET] == 0){//手动放瓶
+			virtual_input[48- VIRTUAL_INPUT_OFFSET] = 1;
+			if (counter_env.system_signal == SYSTER_STOP){
+				counter_env.servo_motor_shift_bottle_time = SET_FILL_SERVO_MOTOR_SHIFT_BOTTLE_DELAY+1;
+				counter_env.servo_motor_pulse_num = SET_FILL_SERVO_MOTOR_PULSE_NUM;
+			}
+		}
 	}
 }
 //LED1 任务 
