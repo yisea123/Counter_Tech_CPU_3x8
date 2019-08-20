@@ -178,7 +178,7 @@ void fill_reset_fill_bottle_complete (s_fill_bottle_module * p_fill_bottle_modul
 {
 //	p_fill_bottle_module->fill_bottle_op_delay = SET_FILL_RESET_FILL_BOTTLE_COMPLETE_DELAY;
 //	p_fill_bottle_module->fill_complete_delay = p_fill_bottle_module->fill_bottle_op_delay;
-	p_fill_bottle_module->pre_fill_complete_time = 0;
+//	p_fill_bottle_module->pre_fill_complete_time = 0;
 	SET_OUTPUT_OFF(&p_fill_bottle_module->output_buf, OUTPUT_BUF_COMPLETE);
 }
 //
@@ -373,15 +373,14 @@ void fill_pre_open_door_time_set(s_fill_bottle_module * p_fill_bottle_module)
 {	
 	uint16_t temp_u16 = 0;/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if (p_fill_bottle_module->enable_big_gate == MY_ENABLE){//使用总料门
-		temp_u16 = (SET_FILL_OPEN_SHIFT_BOTTLE_DELAY
-								+ SET_FILL_CLOSE_SHIFT_BOTTLE_DELAY);
+		temp_u16 = (SET_FILL_OPEN_SHIFT_BOTTLE_DELAY);
 	}else{//不使用使用总料门
-		temp_u16 = (SET_FILL_OPEN_SHIFT_BOTTLE_DELAY
-								+ SET_FILL_CLOSE_SHIFT_BOTTLE_DELAY);
+		temp_u16 = (SET_FILL_OPEN_SHIFT_BOTTLE_DELAY);
 	}
 	if (counter_env.set_pre_open_door_time > 0){//大于0才有提前打开这个功能
 		if (temp_u16 > counter_env.set_pre_open_door_time){
 			p_fill_bottle_module->pre_fill_complete_time = temp_u16- counter_env.set_pre_open_door_time;//小料门提前打开时间
+			p_fill_bottle_module->pre_fill_complete_ctr++;
 		}else{
 			p_fill_bottle_module->pre_fill_complete_time = 0;
 		}
@@ -404,6 +403,7 @@ void fill_bottle_standby_common_op (s_fill_bottle_module * p_fill_bottle_module)
 			fill_up_nozzle_no_delay (p_fill_bottle_module);//停机延时一段时间后后料嘴升上去
 		}
 	}else if (counter_env.system_signal == SYSTER_RESET){
+		p_fill_bottle_module->pre_fill_complete_ctr = 0;
 		p_fill_bottle_module->fill_bottle_speed_ctr = 1;
 		p_fill_bottle_module->fill_bottle_idle_time = 0;
 		p_fill_bottle_module->pre_open_big_gate_flag = PRE_BIG_GATE_INIT;
@@ -444,7 +444,7 @@ uint16_t poll_fill_complete_status (s_fill_bottle_module * p_fill_bottle_module)
 			if (GET_BIT(p_fill_bottle_module->input_buf, OUTPUT_BUF_SCREW_RD) == 0){//等待信号拉低
 				p_fill_bottle_module->complete_signal_t++;
 				if (p_fill_bottle_module->complete_signal_t == SIGNAL_ON_TIME){
-					//fill_close_shift_bottle_no_delay (p_fill_bottle_module);
+					fill_close_shift_bottle_no_delay (p_fill_bottle_module);
 					p_fill_bottle_module->complete_signal_poll_status++;
 					p_fill_bottle_module->complete_signal_t = 0;
 					fill_pre_open_door_time_set (p_fill_bottle_module);
@@ -470,7 +470,7 @@ uint16_t poll_fill_complete_status (s_fill_bottle_module * p_fill_bottle_module)
 			r_value = 1;
 		}
 		if (counter_env.screw_running == 0){//螺杆放瓶启动后就可以撤销放瓶信号
-			//fill_close_shift_bottle_no_delay (p_fill_bottle_module);
+			fill_close_shift_bottle_no_delay (p_fill_bottle_module);
 		}
 		if (counter_env.servo_motor_shift_bottle_time == SET_FILL_SERVO_MOTOR_SHIFT_BOTTLE_DELAY){
 			fill_pre_open_door_time_set (p_fill_bottle_module);

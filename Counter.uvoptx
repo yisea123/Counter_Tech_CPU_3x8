@@ -119,6 +119,11 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+          <Name>t環	t環	趏Gs</Name>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>ARMRTXEVENTFLAGS</Key>
           <Name>-L70 -Z18 -C0 -M0 -T1</Name>
         </SetRegEntry>
@@ -228,7 +233,7 @@
         <Ww>
           <count>16</count>
           <WinNumber>1</WinNumber>
-          <ItemText>fill_bottle_module,0x0A</ItemText>
+          <ItemText>fill_bottle_module,0x10</ItemText>
         </Ww>
         <Ww>
           <count>17</count>
@@ -248,20 +253,15 @@
         <Ww>
           <count>20</count>
           <WinNumber>1</WinNumber>
-          <ItemText>virtual_input[6]</ItemText>
+          <ItemText>fill_bottle_module[0].pre_fill_complete_ctr</ItemText>
         </Ww>
         <Ww>
           <count>21</count>
           <WinNumber>1</WinNumber>
-          <ItemText>virtual_input[7]</ItemText>
+          <ItemText>fill_bottle_module[1].pre_fill_complete_ctr</ItemText>
         </Ww>
         <Ww>
           <count>22</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>virtual_input[9]</ItemText>
-        </Ww>
-        <Ww>
-          <count>23</count>
           <WinNumber>1</WinNumber>
           <ItemText>virtual_input[43- VIRTUAL_INPUT_OFFSET]</ItemText>
         </Ww>

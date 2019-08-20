@@ -82,6 +82,7 @@ typedef struct{
 	uint16_t fill_bottle_flag;
 	
 	uint16_t pre_fill_complete_time;//提前给装瓶完成信号延时
+	uint16_t pre_fill_complete_ctr;//
 	e_pre_big_gate_op pre_open_big_gate_flag;
 	uint16_t pre_open_big_gate_ctr;
 	e_pre_big_gate_op pre_close_big_gate_flag;

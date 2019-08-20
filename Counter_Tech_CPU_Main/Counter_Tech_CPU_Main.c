@@ -337,6 +337,14 @@ void screw_motor_pwm_process (void)
 //
 void screw_shift_bottle (uint16_t input_low)
 {
+	static uint16_t speed_tmp = 0;
+	static uint16_t speed_time_ctr = 0;
+		speed_time_ctr++;
+	if (speed_time_ctr == 20000){
+		speed_time_ctr = 0;
+		counter_env.speed = speed_tmp * 3;
+		speed_tmp = 0;
+	}
 	if (counter_env.system_signal == SYSTER_RESET){
 		counter_env.screw_shift_bottle_status = 0;
 		counter_env.screw_running = 1;
@@ -358,6 +366,7 @@ void screw_shift_bottle (uint16_t input_low)
 					counter_env.servo_motor_shift_bottle_time = SET_FILL_SERVO_MOTOR_SHIFT_BOTTLE_DELAY+1;
 					counter_env.servo_motor_pulse_num = SET_FILL_SERVO_MOTOR_PULSE_NUM;
 					counter_env.screw_shift_bottle_status = 1;
+					speed_tmp += counter_env.set_servo_motor_shift_bottle_num;
 				}
 				break;
 			case 1:
@@ -841,7 +850,7 @@ void map_output_signal ()
 	//////////////////////////////////////////////////////////////////////
 	LED1 = (counter_env.system_signal == SYSTER_RUNNING) ? 1 : 0;
 	LED3 = counter_env.led_yellow;
-	counter_env.speed = fill_bottle_module[0].speed + fill_bottle_module[1].speed;
+	//counter_env.speed = fill_bottle_module[0].speed + fill_bottle_module[1].speed;
 	counter_env.total_good = fill_bottle_module[0].total_good + fill_bottle_module[1].total_good + counter_env.ext_total_good;
 	counter_env.total_reject = fill_bottle_module[0].total_reject + fill_bottle_module[1].total_reject;
 	////////////////////////////////////////////////////////////////////////////////

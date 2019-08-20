@@ -264,8 +264,8 @@ typedef struct{
 	uint16_t is_master;
 	uint16_t ext_fill_b_t;
 	uint16_t ext_fill_b_signal_on;
-	uint16_t servo_motor_pulse_num;
 	uint16_t servo_motor_shift_bottle_time;
+	uint32_t servo_motor_pulse_num;
 	uint32_t counter_start_delay;//延时启动
 	uint32_t counter_stop_idle_time;//延时启动
 	
