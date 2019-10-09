@@ -205,17 +205,29 @@ void Modbus_RegMap(void)
 	MAP_MODBUS_HOLDREG(138, counter_module[0].input_buf_low);//MAP_MODBUS_HOLDREG(138, rand_tmp);
 	MAP_MODBUS_HOLDREG(139, fill_bottle_module[0].output_buf_map);
 	MAP_MODBUS_HOLDREG(140, counter_module[0].output_buf_low_map);
-	for (i = 0; i < 16; i++){
+	for (i = 0; i < 8; i++){
 		MAP_MODBUS_HOLDREG(141 + i, counter_module[0].chanel[i].length);
 	}
-	for (i = 0; i < 16; i++){
+	for (i = 0; i < 8; i++){
+		MAP_MODBUS_HOLDREG(149 + i, counter_module[1].chanel[i].length);
+	}
+	for (i = 0; i < 8; i++){
 		MAP_MODBUS_HOLDREG(157 + i, counter_module[0].chanel[i].piece_interval);
 	}
-	for (i = 0; i < 16; i++){
+	for (i = 0; i < 8; i++){
+		MAP_MODBUS_HOLDREG(165 + i, counter_module[1].chanel[i].piece_interval);
+	}
+	for (i = 0; i < 8; i++){
 		MAP_MODBUS_HOLDREG(173 + i, counter_module[0].chanel[i].close_door_interval);
 	}
-	for (i = 0; i < 16; i++){
+	for (i = 0; i < 8; i++){
+		MAP_MODBUS_HOLDREG(181 + i, counter_module[1].chanel[i].close_door_interval);
+	}
+	for (i = 0; i < 8; i++){
 		MAP_MODBUS_HOLDREG(189 + i, counter_module[0].chanel[i].door_switch_interval);
+	}
+	for (i = 0; i < 8; i++){
+		MAP_MODBUS_HOLDREG(197 + i, counter_module[1].chanel[i].door_switch_interval);
 	}//205
 	MAP_MODBUS_HOLDREG(286, fill_bottle_module[0].fill_complete_delay);
 	MAP_MODBUS_HOLDREG(287, fill_bottle_module[0].input_buf_map);

@@ -471,12 +471,20 @@ void counter_task_poll (void)
 			if (SYSTEM_START_SWITCH == 0){
 				counter_env.system_signal = SYSTER_RESET;
 				counter_pre_start ();//预运行，做一些准备工作
+				counter_env.servo_motor_shift_bottle_time = SET_FILL_SERVO_MOTOR_SHIFT_BOTTLE_DELAY+1;
+				counter_env.servo_motor_pulse_num = SET_FILL_SERVO_MOTOR_PULSE_NUM;
 			}else{
 				if (counter_env.counter_stop_idle_time < 60000){
 					counter_env.counter_stop_idle_time++;
 				}
 			}
 			counter_env.counter_start_delay = 0;
+			break;
+		case SHIFT_A_BOTTLE:
+			if ((counter_env.servo_motor_shift_bottle_time == 1) && (counter_env.servo_motor_pulse_num == 0)){
+				counter_env.servo_motor_shift_bottle_time = 0;
+				counter_env.system_signal = SYSTER_RESET;
+			}
 			break;
 		case SYSTER_RESET:
 			counter_env.counter_start_delay++;
@@ -834,11 +842,16 @@ void map_output_signal ()
 	
 	MAP_FILL_SIG_TO_EXT_OUTPUT (0, 16, OUTPUT_BUF_VIB); //振动器
 	MAP_FILL_SIG_TO_EXT_OUTPUT (1, 19, OUTPUT_BUF_VIB); //振动器
-#ifdef USE_SCREW_SHIFT_BOTTLE
-	MAP_FILL_SIG_TO_EXT_OUTPUT (0, 22, OUTPUT_BUF_BOTTLE_SHIFT); 
-#else
-	MAP_FILL_SIG_TO_EXT_OUTPUT (0, 22, OUTPUT_BUF_EXT_FILL_B); 
-#endif
+	
+	if (counter_env.is_master){//小料门输出损坏备用代码
+		MAP_DOOR_TO_EXT_OUTPUT (0, 22, 5);
+	}else{
+	#ifdef USE_SCREW_SHIFT_BOTTLE
+		MAP_FILL_SIG_TO_EXT_OUTPUT (0, 22, OUTPUT_BUF_BOTTLE_SHIFT); 
+	#else
+		MAP_FILL_SIG_TO_EXT_OUTPUT (0, 22, OUTPUT_BUF_EXT_FILL_B); 
+	#endif
+	}
 	
 	MAP_SIG_TO_EXT_OUTPUT (23, CONVEYOR_START);
 	MAP_SIG_TO_EXT_OUTPUT (25, counter_env.screw_running);//螺杆运转信号

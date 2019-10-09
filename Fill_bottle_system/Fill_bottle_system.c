@@ -89,28 +89,76 @@ void fill_insert_to_rej_q (s_fill_bottle_module * p_fill_bottle_module)
 	p_fill_bottle_module->total_count_sum++;
 }
 //
-void fill_open_big_gate_door (s_fill_bottle_module * p_fill_bottle_module)
+void fill_up_nozzle_no_delay (s_fill_bottle_module * p_fill_bottle_module)
 {
-	p_fill_bottle_module->fill_bottle_op_delay = SET_FILL_OPEN_BIG_GATE_DOOR_DELAY;
-	p_fill_bottle_module->big_gate_delay = p_fill_bottle_module->fill_bottle_op_delay;
-	SET_OUTPUT_ON(&p_fill_bottle_module->output_buf, OUTPUT_BUF_BIG_GATE_DOOR);
+//	SET_OUTPUT_ON(&p_fill_bottle_module->output_buf, OUTPUT_BUF_NOZZLE);
+	SET_OUTPUT_OFF(&p_fill_bottle_module->output_buf, OUTPUT_BUF_NOZZLE);
 }
-void fill_close_big_gate_door (s_fill_bottle_module * p_fill_bottle_module)
+void fill_down_nozzle_no_delay (s_fill_bottle_module * p_fill_bottle_module)
 {
-	p_fill_bottle_module->fill_bottle_op_delay = SET_FILL_CLOSE_BIG_GATE_DOOR_DELAY;
-	p_fill_bottle_module->big_gate_delay = p_fill_bottle_module->fill_bottle_op_delay;
-//	inc_Modbus_test_value ();
-	SET_OUTPUT_OFF(&p_fill_bottle_module->output_buf, OUTPUT_BUF_BIG_GATE_DOOR);
+	p_fill_bottle_module->nozzle_down_delay = 0;
+//	SET_OUTPUT_OFF(&p_fill_bottle_module->output_buf, OUTPUT_BUF_NOZZLE);
+	SET_OUTPUT_ON(&p_fill_bottle_module->output_buf, OUTPUT_BUF_NOZZLE);
+}
+//
+void fill_up_nozzle (s_fill_bottle_module * p_fill_bottle_module)
+{
+	p_fill_bottle_module->fill_bottle_op_delay = SET_FILL_UP_NOZZLE_DELAY;
+	p_fill_bottle_module->nozzle_up_delay = p_fill_bottle_module->fill_bottle_op_delay;
+	p_fill_bottle_module->nozzle_delay = p_fill_bottle_module->nozzle_up_delay;
+	fill_up_nozzle_no_delay (p_fill_bottle_module);
+}
+//
+void fill_down_nozzle (s_fill_bottle_module * p_fill_bottle_module)
+{
+	p_fill_bottle_module->fill_bottle_op_delay = SET_FILL_DOWN_NOZZLE_DELAY;
+	p_fill_bottle_module->nozzle_down_delay = p_fill_bottle_module->fill_bottle_op_delay;
+	p_fill_bottle_module->nozzle_delay = p_fill_bottle_module->nozzle_down_delay;
+	fill_down_nozzle_no_delay (p_fill_bottle_module);
+}
+//
+void fill_start_nozzle_vib (s_fill_bottle_module * p_fill_bottle_module) 
+{
+	if (SET_FILL_ENABLE_NOZZLE_VIB == MY_ENABLE){
+		if (p_fill_bottle_module->nozzle_vib_status == MY_DISABLE){
+			p_fill_bottle_module->nozzle_vib_status = MY_ENABLE;//料嘴开始振动
+			p_fill_bottle_module->nozzle_vib_up_time = SET_FILL_NOZZLE_VIB_UP_TIME;
+			p_fill_bottle_module->nozzle_vib_down_time = 0;
+		}
+	}
+}
+//
+void fill_stop_nozzle_vib (s_fill_bottle_module * p_fill_bottle_module) 
+{
+	p_fill_bottle_module->nozzle_vib_status = MY_DISABLE;//料嘴停止振动
+	p_fill_bottle_module->nozzle_vib_up_time = 0;
+	p_fill_bottle_module->nozzle_vib_down_time = 0;
+	fill_down_nozzle_no_delay (p_fill_bottle_module);
 }
 //
 void fill_open_big_gate_door_no_delay (s_fill_bottle_module * p_fill_bottle_module)
 {
+	fill_start_nozzle_vib (p_fill_bottle_module);
 	SET_OUTPUT_ON(&p_fill_bottle_module->output_buf, OUTPUT_BUF_BIG_GATE_DOOR);
 }
 //
 void fill_close_big_gate_door_no_delay (s_fill_bottle_module * p_fill_bottle_module)
 {
 	SET_OUTPUT_OFF(&p_fill_bottle_module->output_buf, OUTPUT_BUF_BIG_GATE_DOOR);
+}
+//
+void fill_open_big_gate_door (s_fill_bottle_module * p_fill_bottle_module)
+{
+	p_fill_bottle_module->fill_bottle_op_delay = SET_FILL_OPEN_BIG_GATE_DOOR_DELAY;
+	p_fill_bottle_module->big_gate_delay = p_fill_bottle_module->fill_bottle_op_delay;
+	fill_open_big_gate_door_no_delay (p_fill_bottle_module);
+}
+void fill_close_big_gate_door (s_fill_bottle_module * p_fill_bottle_module)
+{
+	p_fill_bottle_module->fill_bottle_op_delay = SET_FILL_CLOSE_BIG_GATE_DOOR_DELAY;
+	p_fill_bottle_module->big_gate_delay = p_fill_bottle_module->fill_bottle_op_delay;
+//	inc_Modbus_test_value ();
+	fill_close_big_gate_door_no_delay (p_fill_bottle_module);
 }
 //
 void fill_open_shift_bottle (s_fill_bottle_module * p_fill_bottle_module)
@@ -137,35 +185,6 @@ void fill_close_shift_bottle (s_fill_bottle_module * p_fill_bottle_module)
 	p_fill_bottle_module->fill_bottle_op_delay = SET_FILL_CLOSE_SHIFT_BOTTLE_DELAY;
 	p_fill_bottle_module->shift_bottle_delay = p_fill_bottle_module->fill_bottle_op_delay;
 	SET_OUTPUT_OFF(&p_fill_bottle_module->output_buf, OUTPUT_BUF_BOTTLE_SHIFT);
-}
-//
-void fill_up_nozzle (s_fill_bottle_module * p_fill_bottle_module)
-{
-	p_fill_bottle_module->fill_bottle_op_delay = SET_FILL_UP_NOZZLE_DELAY;
-	p_fill_bottle_module->nozzle_up_delay = p_fill_bottle_module->fill_bottle_op_delay;
-	p_fill_bottle_module->nozzle_delay = p_fill_bottle_module->nozzle_up_delay;
-//	SET_OUTPUT_ON(&p_fill_bottle_module->output_buf, OUTPUT_BUF_NOZZLE);
-	SET_OUTPUT_OFF(&p_fill_bottle_module->output_buf, OUTPUT_BUF_NOZZLE);
-}
-//
-void fill_down_nozzle (s_fill_bottle_module * p_fill_bottle_module)
-{
-	p_fill_bottle_module->fill_bottle_op_delay = SET_FILL_DOWN_NOZZLE_DELAY;
-	p_fill_bottle_module->nozzle_down_delay = p_fill_bottle_module->fill_bottle_op_delay;
-	p_fill_bottle_module->nozzle_delay = p_fill_bottle_module->nozzle_down_delay;
-//	SET_OUTPUT_OFF(&p_fill_bottle_module->output_buf, OUTPUT_BUF_NOZZLE);
-	SET_OUTPUT_ON(&p_fill_bottle_module->output_buf, OUTPUT_BUF_NOZZLE);
-}
-void fill_up_nozzle_no_delay (s_fill_bottle_module * p_fill_bottle_module)
-{
-//	SET_OUTPUT_ON(&p_fill_bottle_module->output_buf, OUTPUT_BUF_NOZZLE);
-	SET_OUTPUT_OFF(&p_fill_bottle_module->output_buf, OUTPUT_BUF_NOZZLE);
-}
-void fill_down_nozzle_no_delay (s_fill_bottle_module * p_fill_bottle_module)
-{
-	p_fill_bottle_module->nozzle_down_delay = 0;
-//	SET_OUTPUT_OFF(&p_fill_bottle_module->output_buf, OUTPUT_BUF_NOZZLE);
-	SET_OUTPUT_ON(&p_fill_bottle_module->output_buf, OUTPUT_BUF_NOZZLE);
 }
 //
 void fill_set_fill_bottle_complete (s_fill_bottle_module * p_fill_bottle_module)
@@ -298,26 +317,26 @@ void fill_common_op (s_fill_bottle_module * p_fill_bottle_module)
 		p_fill_bottle_module->pre_open_big_gate_ctr = 0;
 	}
 	//////////////////////////////////////////////
-	if (p_fill_bottle_module->pre_open_big_gate_flag == PRE_BIG_GATE_OPEN_ED){
-		if (GET_BIT (p_fill_bottle_module->input_buf, OUTPUT_BUF_COMPLETE) == 0){//数粒完成
-			if (p_fill_bottle_module->pre_count_complete_ctr == SET_PIECE_FALL_TIME){
-				fill_close_big_gate_door_no_delay (p_fill_bottle_module);
-				p_fill_bottle_module->pre_close_big_gate_flag = PRE_BIG_GATE_CLOSE_ING;
-				p_fill_bottle_module->pre_open_big_gate_flag = PRE_BIG_GATE_OPEN_ED1;
-			}
-		}
-	}
-	//////////////////////////////////////////////
-	if (p_fill_bottle_module->pre_close_big_gate_flag == PRE_BIG_GATE_CLOSE_ING){		
-		if (p_fill_bottle_module->pre_close_big_gate_ctr <= SET_FILL_CLOSE_BIG_GATE_DOOR_DELAY){
-			p_fill_bottle_module->pre_close_big_gate_ctr++;
-		}
-		if (p_fill_bottle_module->pre_close_big_gate_ctr == SET_FILL_CLOSE_BIG_GATE_DOOR_DELAY){
-			p_fill_bottle_module->pre_close_big_gate_flag = PRE_BIG_GATE_CLOSE_ED;
-		}
-	}else{
-		p_fill_bottle_module->pre_close_big_gate_ctr = 0;
-	}
+//	if (p_fill_bottle_module->pre_open_big_gate_flag == PRE_BIG_GATE_OPEN_ED){
+//		if (GET_BIT (p_fill_bottle_module->input_buf, OUTPUT_BUF_COMPLETE) == 0){//数粒完成
+//			if (p_fill_bottle_module->pre_count_complete_ctr == SET_PIECE_FALL_TIME){
+//				fill_close_big_gate_door_no_delay (p_fill_bottle_module);
+//				p_fill_bottle_module->pre_close_big_gate_flag = PRE_BIG_GATE_CLOSE_ING;
+//				p_fill_bottle_module->pre_open_big_gate_flag = PRE_BIG_GATE_OPEN_ED1;
+//			}
+//		}
+//	}
+//	//////////////////////////////////////////////
+//	if (p_fill_bottle_module->pre_close_big_gate_flag == PRE_BIG_GATE_CLOSE_ING){		
+//		if (p_fill_bottle_module->pre_close_big_gate_ctr <= SET_FILL_CLOSE_BIG_GATE_DOOR_DELAY){
+//			p_fill_bottle_module->pre_close_big_gate_ctr++;
+//		}
+//		if (p_fill_bottle_module->pre_close_big_gate_ctr == SET_FILL_CLOSE_BIG_GATE_DOOR_DELAY){
+//			p_fill_bottle_module->pre_close_big_gate_flag = PRE_BIG_GATE_CLOSE_ED;
+//		}
+//	}else{
+//		p_fill_bottle_module->pre_close_big_gate_ctr = 0;
+//	}
 	if (p_fill_bottle_module->fill_bottle_flag == 1){
 		if (GET_BIT (p_fill_bottle_module->input_buf, OUTPUT_BUF_COMPLETE) == 0){//数粒完成
 			if (p_fill_bottle_module->pre_count_complete_ctr < SET_PIECE_FALL_TIME){
@@ -348,25 +367,6 @@ void fill_sync_vibrator_signal (s_fill_bottle_module * p_fill_bottle_module)
 	}else{
 		SET_OUTPUT_OFF(&p_fill_bottle_module->output_buf, OUTPUT_BUF_VIB);
 	}
-}
-//
-void fill_start_nozzle_vib (s_fill_bottle_module * p_fill_bottle_module) 
-{
-	if (SET_FILL_ENABLE_NOZZLE_VIB == MY_ENABLE){
-		if (p_fill_bottle_module->nozzle_vib_status == MY_DISABLE){
-			p_fill_bottle_module->nozzle_vib_status = MY_ENABLE;//料嘴开始振动
-			p_fill_bottle_module->nozzle_vib_up_time = SET_FILL_NOZZLE_VIB_UP_TIME;
-			p_fill_bottle_module->nozzle_vib_down_time = 0;
-		}
-	}
-}
-//
-void fill_stop_nozzle_vib (s_fill_bottle_module * p_fill_bottle_module) 
-{
-	p_fill_bottle_module->nozzle_vib_status = MY_DISABLE;//料嘴停止振动
-	p_fill_bottle_module->nozzle_vib_up_time = 0;
-	p_fill_bottle_module->nozzle_vib_down_time = 0;
-	fill_down_nozzle_no_delay (p_fill_bottle_module);
 }
 //
 void fill_pre_open_door_time_set(s_fill_bottle_module * p_fill_bottle_module)
@@ -573,19 +573,22 @@ void fill_bottle_sys_use_big_gate_process (s_fill_bottle_module * p_fill_bottle_
 				break;
 			}
 		case OPEN_BIG_GATE:
-			fill_start_nozzle_vib (p_fill_bottle_module);
 			if (p_fill_bottle_module->pre_open_big_gate_flag == PRE_BIG_GATE_INIT){
 				fill_open_big_gate_door (p_fill_bottle_module);
 				p_fill_bottle_module->fill_bottle_state = CLOSE_BIG_GATE;
 			}else if (p_fill_bottle_module->pre_open_big_gate_flag == PRE_BIG_GATE_OPEN_ING){
 				p_fill_bottle_module->fill_bottle_op_delay = SET_FILL_OPEN_BIG_GATE_DOOR_DELAY - p_fill_bottle_module->pre_open_big_gate_ctr;
 				p_fill_bottle_module->fill_bottle_state = CLOSE_BIG_GATE;
-				fill_open_big_gate_door_no_delay (p_fill_bottle_module);
+			}else if (p_fill_bottle_module->pre_open_big_gate_flag == PRE_BIG_GATE_OPEN_ED){
+				p_fill_bottle_module->fill_bottle_state = CLOSE_BIG_GATE;
 			}else if (p_fill_bottle_module->pre_close_big_gate_flag == PRE_BIG_GATE_CLOSE_ING){
 				p_fill_bottle_module->fill_bottle_op_delay = SET_FILL_CLOSE_BIG_GATE_DOOR_DELAY - p_fill_bottle_module->pre_close_big_gate_ctr;
 				p_fill_bottle_module->fill_bottle_state = READY_TO_SHIFT_BOTTLE;
 			}else if (p_fill_bottle_module->pre_close_big_gate_flag == PRE_BIG_GATE_CLOSE_ED){
 				p_fill_bottle_module->fill_bottle_state = READY_TO_SHIFT_BOTTLE;
+			}else{
+				fill_open_big_gate_door (p_fill_bottle_module);
+				p_fill_bottle_module->fill_bottle_state = CLOSE_BIG_GATE;
 			}
 			p_fill_bottle_module->pre_open_big_gate_flag = PRE_BIG_GATE_INIT;
 			p_fill_bottle_module->pre_close_big_gate_flag = PRE_BIG_GATE_INIT;

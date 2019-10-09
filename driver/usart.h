@@ -10,7 +10,7 @@
 #define EN_USART2_RX 1
 
 #define UART3_BOUND_RATE 9600 //19200
-#define UART3_BUF_LEN 64
+#define UART3_BUF_LEN 256
 #define EN_USART3_RX 1
 
 void uart1_send_data (int ch);

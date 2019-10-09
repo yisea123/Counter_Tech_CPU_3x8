@@ -36,6 +36,8 @@
 
 #define SET_FILL_PRODUCT_NUM (counter_env.set_product_num)
 
+#define SET_PIECE_FALL_TIME 450//备料时间
+
 
 
 

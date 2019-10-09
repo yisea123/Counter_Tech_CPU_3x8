@@ -75,6 +75,7 @@
 #define DETECT_ON 0
 #define DETECT_OFF 1
 
+#define SHIFT_A_BOTTLE 4
 #define SYSTER_PRE_STOP 3
 #define SYSTER_RESET 2
 #define SYSTER_RUNNING 1
@@ -126,7 +127,6 @@
 #define SET_SIM_INTERVAL_X p_counter_module->set_para.set_sim_interval_X
 #define SET_SIM_INTERVAL_Y p_counter_module->set_para.set_sim_interval_Y
 
-#define SET_PIECE_FALL_TIME 200//备料时间
 
 #define SET_SIM_SCAN_CTR p_counter_module->set_para.sim_scan_ctr
 
