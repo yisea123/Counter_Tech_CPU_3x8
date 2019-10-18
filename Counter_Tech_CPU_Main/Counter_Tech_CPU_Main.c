@@ -386,6 +386,12 @@ void screw_shift_bottle (uint16_t input_low)
 //
 void sync_parameter (void)
 {	
+	counter_module[0].set_para.set_door_close_interval = 30;
+	counter_module[0].set_para.set_door_switch_interval = 200;
+	counter_env.set_continue_reject_stop_num = 1000;
+	counter_env.set_pre_open_door_time = 0;
+	fill_bottle_module[0].set_para.set_nozzle_up_time = 0;
+	fill_bottle_module[0].set_para.set_nozzle_down_time = 0;
 	memcpy (&counter_module[1].set_para, &counter_module[0].set_para, sizeof (s_counter_set_para));
 	memcpy (&fill_bottle_module[1].set_para, &fill_bottle_module[0].set_para, sizeof (s_fill_bottle_set_para));
 }
@@ -471,8 +477,8 @@ void counter_task_poll (void)
 			if (SYSTEM_START_SWITCH == 0){
 				counter_env.system_signal = SYSTER_RESET;
 				counter_pre_start ();//预运行，做一些准备工作
-				counter_env.servo_motor_shift_bottle_time = SET_FILL_SERVO_MOTOR_SHIFT_BOTTLE_DELAY+1;
-				counter_env.servo_motor_pulse_num = SET_FILL_SERVO_MOTOR_PULSE_NUM;
+//				counter_env.servo_motor_shift_bottle_time = SET_FILL_SERVO_MOTOR_SHIFT_BOTTLE_DELAY+1;
+//				counter_env.servo_motor_pulse_num = SET_FILL_SERVO_MOTOR_PULSE_NUM;
 			}else{
 				if (counter_env.counter_stop_idle_time < 60000){
 					counter_env.counter_stop_idle_time++;
@@ -480,12 +486,12 @@ void counter_task_poll (void)
 			}
 			counter_env.counter_start_delay = 0;
 			break;
-		case SHIFT_A_BOTTLE:
-			if ((counter_env.servo_motor_shift_bottle_time == 1) && (counter_env.servo_motor_pulse_num == 0)){
-				counter_env.servo_motor_shift_bottle_time = 0;
-				counter_env.system_signal = SYSTER_RESET;
-			}
-			break;
+//		case SHIFT_A_BOTTLE:
+//			if ((counter_env.servo_motor_shift_bottle_time == 1) && (counter_env.servo_motor_pulse_num == 0)){
+//				counter_env.servo_motor_shift_bottle_time = 0;
+//				counter_env.system_signal = SYSTER_RESET;
+//			}
+//			break;
 		case SYSTER_RESET:
 			counter_env.counter_start_delay++;
 			counter_env.counter_stop_idle_time = 0;
@@ -664,7 +670,8 @@ void counter_pre_start (void)
 		counter_module[i].output_buf_low = 0xFFFF;
 		counter_module[i].normal_count = SET_COUNT;//开机先放走一瓶
 //		counter_module[i].normal_count = 0;//开机先放走一瓶
-//		counter_module[i].pre_count = 0;
+		counter_module[i].pre_count = 0;
+//		counter_module[i].pre_count = SET_COUNT;
 	}
 //	for (i = 0; i < FILL_BOTTLE_MODULE_NUM; i++){
 //		fill_down_nozzle (&fill_bottle_module[i]);//开机先把料嘴放下去

@@ -462,8 +462,10 @@ uint16_t poll_fill_complete_status (s_fill_bottle_module * p_fill_bottle_module)
 		default:break;
 	}
 	if (counter_env.system_signal == SYSTER_STOP){
-		fill_close_shift_bottle_no_delay (p_fill_bottle_module);
-		r_value = 1;
+		if ((counter_env.servo_motor_shift_bottle_time == 1) && (counter_env.servo_motor_pulse_num == 0)){
+			fill_close_shift_bottle_no_delay (p_fill_bottle_module);
+			r_value = 1;
+		}
 	}
 	if (counter_env.is_master){
 		if ((counter_env.servo_motor_shift_bottle_time == 1) && (counter_env.servo_motor_pulse_num == 0)){

@@ -6,7 +6,7 @@
 
 #define MAP_FILL_SIG_TO_EXT_OUTPUT(F_CH, EX_CH, SIGNAL){ \
 	if (counter_env.system_signal == SYSTER_STOP){ \
-		if (fill_bottle_module[F_CH].fill_bottle_idle_time > 1000){ \
+		if (fill_bottle_module[F_CH].fill_bottle_idle_time > 2000){ \
 			EXT_OUT##EX_CH = GET_BIT (fill_bottle_module[F_CH].output_buf_manual_real, SIGNAL); \
 		}else{ \
 			EXT_OUT##EX_CH = GET_BIT (fill_bottle_module[F_CH].output_buf, SIGNAL); \
